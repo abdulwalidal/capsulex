@@ -4,7 +4,7 @@ This roadmap outlines the milestones, planned capabilities, and development traj
 
 ---
 
-## 🎯 Vision
+## Vision
 
 Provide an open-source, universal, and risk-free firmware management utility that simplifies UEFI/BIOS interaction through an intuitive desktop interface, automated pre-flight safety checks, and transparent technical guidance.
 

@@ -4,10 +4,10 @@
 
 Only the latest release of CapsuleX receives security updates.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| v0.1.x  | :white_check_mark: |
-| < v0.1  | :x:                |
+| Version | Supported |
+| ------- | --------- |
+| v0.1.x  | Yes       |
+| < v0.1  | No        |
 
 ---
 
