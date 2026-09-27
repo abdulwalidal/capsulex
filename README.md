@@ -35,31 +35,53 @@ Managing motherboard firmware (BIOS/UEFI) has traditionally been an intimidating
 
 ## How It Protects Your System
 
-```text
-[ Desktop GUI ]                                            [ Hardware / Firmware ]
-+-----------------------+                                  +---------------------+
-|  CapsuleX UI          |                                  |                     |
-|  Dashboard & Controls |                                  |                     |
-+-----------+-----------+                                  |                     |
-            |                                              |                     |
-            v                                              |                     |
-+-----------------------+                                  |                     |
-|  Pre-Flight Engine    |                                  |                     |
-|  • AC Power Check     |                                  |                     |
-|  • Battery >= 50%     |                                  |                     |
-|  • SHA-256 Digest     |                                  |                     |
-|  • Device ID Match    |                                  |                     |
-+-----------+-----------+                                  |                     |
-            |                                              |                     |
-            v (Only if 100% Passed)                        |                     |
-+-----------------------+      Staged Capsule (Safe API)   |  Native UEFI Flash  |
-|  OEM / OS Handoff     | ===============================> |  On Next Reboot     |
-|  (fwupd / Capsule)    |                                  |  (Vendor Protected) |
-+-----------------------+                                  +---------------------+
+```mermaid
+graph TD
+    classDef safe fill:#1e293b,stroke:#10b981,stroke-width:2px,color:#f8fafc;
+    classDef gate fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#f8fafc;
+    classDef hw fill:#090d16,stroke:#8b5cf6,stroke-width:2px,color:#f8fafc;
+    classDef alert fill:#450a0a,stroke:#ef4444,stroke-width:2px,color:#fca5a5;
+
+    subgraph UserSpace ["Desktop Application Layer"]
+        UI["CapsuleX Modern GUI<br/>(Dashboard • Updates • Settings • Logs)"]
+    end
+
+    subgraph SafetyGate ["Pre-Flight Safety Verification Engine"]
+        Check1{"1. Hardware GUID Match?"}
+        Check2{"2. SHA-256 & Signature Valid?"}
+        Check3{"3. AC Power & Battery >= 50%?"}
+        Blocked["Update Blocked Safe State<br/>(Prevents Brick / Failure)"]
+    end
+
+    subgraph StagingLayer ["Hardware Abstraction & OS Delegation"]
+        HAL["Platform Adapter Layer<br/>(Linux fwupd / Windows ESRT)"]
+        Capsule["UEFI Capsule Payload Staged"]
+    end
+
+    subgraph Silicon ["Protected Motherboard Environment"]
+        UEFI["Native OEM UEFI Engine<br/>(Flashes Safely During Reboot)"]
+        BIOS["Updated System Firmware"]
+    end
+
+    UI --> Check1
+    Check1 -- "No" --> Blocked
+    Check1 -- "Yes" --> Check2
+    Check2 -- "No" --> Blocked
+    Check2 -- "Yes" --> Check3
+    Check3 -- "No" --> Blocked
+    Check3 -- "Yes (Passed)" --> HAL
+    HAL --> Capsule
+    Capsule --> UEFI
+    UEFI --> BIOS
+
+    class UI safe;
+    class Check1,Check2,Check3 gate;
+    class Blocked alert;
+    class HAL,Capsule,UEFI,BIOS hw;
 ```
 
-1. **Inspect**: Safely read current BIOS version and security states.
-2. **Verify**: Pre-flight safety engine confirms AC power, battery health, and cryptographic signatures.
+1. **Inspect**: Safely query current BIOS version, Secure Boot, and platform telemetry.
+2. **Verify**: Pre-flight safety engine confirms AC power, battery reserve, and cryptographic signatures.
 3. **Stage**: Firmware is handed to the official UEFI capsule mechanism for safe flashing upon reboot.
 
 ---
