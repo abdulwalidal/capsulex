@@ -64,6 +64,65 @@ Managing motherboard firmware (BIOS/UEFI) has traditionally been an intimidating
 
 ---
 
+## Firmware Data Architecture (ERD)
+
+The following Entity-Relationship Diagram outlines the core data domain and inspection relationships managed by CapsuleX:
+
+```mermaid
+erDiagram
+    SYSTEM_DEVICE ||--|| FIRMWARE_STATE : operates
+    SYSTEM_DEVICE ||--o{ UPDATE_PACKAGE : queries
+    SYSTEM_DEVICE ||--o{ SAFETY_INSPECTION : validates
+    UPDATE_PACKAGE ||--o{ SAFETY_INSPECTION : evaluated_by
+    SAFETY_INSPECTION ||--o{ AUDIT_LOG : generates
+
+    SYSTEM_DEVICE {
+        string vendor
+        string product_name
+        string machine_guid
+        string boot_mode
+        boolean ac_connected
+        int battery_capacity
+    }
+
+    FIRMWARE_STATE {
+        string bios_version
+        string release_date
+        string secure_boot_status
+        string tpm_status
+        boolean virtualization_enabled
+    }
+
+    UPDATE_PACKAGE {
+        string package_id
+        string target_guid
+        string version
+        string sha256_digest
+        string signature_status
+        int required_battery_min
+    }
+
+    SAFETY_INSPECTION {
+        uuid inspection_id
+        boolean guid_match_passed
+        boolean signature_verified
+        boolean ac_mains_verified
+        boolean battery_threshold_met
+        string inspection_verdict
+    }
+
+    AUDIT_LOG {
+        uuid log_id
+        string timestamp
+        string event_type
+        string previous_version
+        string staged_version
+        string execution_status
+    }
+```
+
+---
+
 ## Quick Start Guide
 
 ### Prerequisites
