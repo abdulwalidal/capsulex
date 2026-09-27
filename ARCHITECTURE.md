@@ -91,7 +91,40 @@ Before any update action transitions from *Discovered* to *Staged*, the Pre-Flig
 
 ---
 
-## 5. Threat Model and Mitigations
+## 5. Firmware Staging Sequence
+
+The sequence diagram below visualizes the delegated execution flow and safety gates during an update operation:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User
+    participant GUI as CapsuleX GUI
+    participant Engine as Pre-Flight Engine
+    participant HAL as Hardware Abstraction Layer
+    participant OS as OS Firmware Service
+    participant UEFI as UEFI Environment
+
+    User->>GUI: Request Firmware Update
+    GUI->>HAL: Query System Telemetry
+    HAL-->>GUI: Return Battery (75%), AC (Online), Machine GUID
+    GUI->>Engine: Run Pre-Flight Checklist
+    Engine->>Engine: Verify SHA-256 Digest & Vendor Signature
+    Engine->>Engine: Validate AC Mains & Battery >= 50%
+    Engine-->>GUI: Pre-Flight Verdict: PASSED
+    GUI->>User: Display Ready to Stage (Prompt Reboot)
+    User->>GUI: Confirm Staging
+    GUI->>OS: Stage Capsule Payload
+    OS-->>UEFI: Mark Capsule Pending in NVRAM
+    OS->>User: System Reboots into UEFI Flash Environment
+    UEFI->>UEFI: Authenticate & Flash Firmware
+    UEFI->>OS: Boot into OS
+    GUI->>HAL: Inspect New Version & Log Success
+```
+
+---
+
+## 6. Threat Model and Mitigations
 
 | Threat | Risk Level | Architectural Mitigation |
 | :--- | :--- | :--- |
