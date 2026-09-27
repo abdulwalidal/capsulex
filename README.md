@@ -87,7 +87,7 @@ npm run dev
 
 ---
 
-## 📚 Open Source Governance & Documentation
+## Open Source Governance and Documentation
 
 CapsuleX is built according to open-source best practices:
 
