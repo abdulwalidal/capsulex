@@ -2,7 +2,8 @@
 
 [![CI](https://github.com/abdulwalidal/capsulex/actions/workflows/ci.yml/badge.svg)](https://github.com/abdulwalidal/capsulex/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Node.js](https://img.shields.io/badge/Node.js-24+-green.svg)](https://nodejs.org/)
+[![Java: 21 LTS](https://img.shields.io/badge/Java-21%20LTS-orange.svg)](https://openjdk.org/)
+[![UI: FlatLaf](https://img.shields.io/badge/UI-FlatLaf%20Dark-5b5ea6.svg)](https://www.formdev.com/flatlaf/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Security: Zero--Brick](https://img.shields.io/badge/Security-Zero--Brick-blueviolet.svg)](SECURITY.md)
 
@@ -148,22 +149,21 @@ erDiagram
 ## Quick Start Guide
 
 ### Prerequisites
-- **Node.js**: v20.0.0 or higher (v24 recommended)
-- **npm**: v10.0.0 or higher
-- **Linux** (Debian, Ubuntu, Fedora, Arch) or **Windows**
+- **Java**: OpenJDK 21 LTS or higher
+- **Linux** (Debian, Ubuntu, Fedora, Arch) or **Windows 10/11**
 
-### Setup & Run
+### Setup and Run
 
 ```bash
 # 1. Clone the repository
 git clone git@github.com:abdulwalidal/capsulex.git
 cd capsulex
 
-# 2. Install dependencies
-npm install
+# 2. Compile and package executable JAR
+./mvnw clean package
 
-# 3. Launch CapsuleX in development mode
-npm run dev
+# 3. Launch CapsuleX desktop console
+java -jar target/capsulex-0.1.0.jar
 ```
 
 ---

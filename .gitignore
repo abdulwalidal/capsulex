@@ -1,44 +1,21 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# Java & Maven
+target/
+*.class
+*.jar
+*.war
+*.ear
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
 
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Distribution / packaging
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# Pytest & testing
-.pytest_cache/
-.coverage
-htmlcov/
-
-# IDE & OS files
-.vscode/
+# IDE & Editor files
 .idea/
+*.iml
+.vscode/
 *.swp
 *.swo
 *~
 .DS_Store
+
+# OS & Logs
 *.log
+.env
