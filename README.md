@@ -1,69 +1,107 @@
-# CapsuleX 🚀
-> **Next-Gen UEFI Firmware Console & Pre-Flight Safety Engine**
+# CapsuleX
 
-CapsuleX is an open, modern, vendor-agnostic desktop utility designed to make BIOS/UEFI firmware inspection, management, and updates safe, understandable, and accessible to everyone.
+[![CI](https://github.com/abdulwalidal/capsulex/actions/workflows/ci.yml/badge.svg)](https://github.com/abdulwalidal/capsulex/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/Node.js-24+-green.svg)](https://nodejs.org/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Security: Zero--Brick](https://img.shields.io/badge/Security-Zero--Brick-blueviolet.svg)](SECURITY.md)
 
----
-
-## 🌟 Key Features
-
-* **Safe Live Inspection (100% Read-Only):** Safely queries system firmware telemetry (Motherboard model, BIOS version, Secure Boot, TPM 2.0, CPU Virtualization, and battery state) without modifying any hardware.
-* **Automated Pre-Flight Safety Engine ("Zero-Brick" Guarantee):** Rigorously validates AC power connection, battery thresholds, device match, and cryptographic package integrity before allowing any firmware update stage.
-* **Firmware Knowledge Base:** Built-in plain-language technical explanations for every low-level parameter and security feature—strictly professional, clear, and without confusing jargon.
-* **Safe Simulation Sandbox:** Practice and test firmware update flows, low-battery aborts, and checksum failures in a zero-risk virtual simulator.
-* **Universal Hardware Architecture:** Hardware Abstraction Layer (HAL) built to support modern UEFI capsule interfaces across vendors (Dell, Lenovo, HP, ASUS, etc.).
+A modern, universal, and risk-free desktop firmware management console designed to simplify UEFI/BIOS inspection, updates, and diagnostics with automated pre-flight safety verification.
 
 ---
 
-## 📁 Project Architecture
+## Why CapsuleX?
+
+Managing motherboard firmware (BIOS/UEFI) has traditionally been an intimidating and risky chore for computer owners. Users are forced to navigate fragmented manufacturer support pages, parse cryptic technical jargon, format USB flash drives, and risk permanently bricking their hardware if an update fails.
+
+**CapsuleX transforms this into a safe, transparent, and user-friendly experience:**
+- **Zero-Brick Architecture**: CapsuleX strictly enforces delegated firmware execution. It **never writes directly to SPI flash chips**. Updates are safely staged into verified UEFI Capsules and handed to OEM firmware mechanisms.
+- **Automated Pre-Flight Inspection**: Mandatory multi-factor safety checklist prevents updates unless AC mains power is connected, battery is $\ge 50\%$, and digital signatures are verified.
+- **Vendor-Agnostic Simplicity**: One unified interface for Dell, Lenovo, HP, ASUS, and custom systems.
+- **Embedded Knowledge Engine**: Every setting and security parameter includes clean, professional system descriptions—no gaming analogies, no cryptic acronyms, just clear technical facts.
+- **Safe Simulation Sandbox**: Practice and test update workflows and failure modes in a risk-free virtual simulator.
+
+---
+
+## Core Highlights
+
+- **Live System Telemetry (100% Read-Only)**: Instantly inspects Motherboard identification, current BIOS revision, release date, Secure Boot status, TPM 2.0 readiness, and CPU Virtualization extensions.
+- **Pre-Flight Safety Verification**: Live multi-point checklist verifying AC power, reserve battery capacity, payload integrity, and device GUID matching.
+- **Firmware Settings Guidance**: View and toggle supported firmware attributes with guided pre-boot authorization workflows.
+- **Diagnostics & Audit History**: Local, persistent audit log documenting every firmware update event, status outcome, and version jump.
+- **Privacy by Design**: Purely local execution. Zero telemetry, zero background trackers, and zero third-party data collection.
+
+---
+
+## How It Protects Your System
 
 ```text
-capsulex/
-├── app.py                 # Application launcher & main window
-├── core/
-│   ├── models.py          # Data classes (SystemInfo, FirmwareUpdate, SafetyCheck)
-│   ├── engine.py          # Pre-flight safety evaluation engine
-│   └── knowledge.py       # Professional technical definitions & system roles
-├── hal/                   # Hardware Abstraction Layer
-│   ├── base.py            # Base abstract telemetry provider
-│   ├── linux_reader.py    # Safe Linux read-only hardware reader
-│   └── simulator.py       # Safe sandbox preset simulator
-└── ui/                    # Desktop GUI components
-    ├── theme.py           # Modern dark-mode styling & color palette
-    ├── dashboard.py       # System overview & security status cards
-    ├── updates.py         # Update center & pre-flight inspection wizard
-    ├── settings.py        # Firmware toggles & guided reboot setup
-    └── diagnostics.py     # System integrity check & update audit history
+[ Desktop GUI ]                                            [ Hardware / Firmware ]
++-----------------------+                                  +---------------------+
+|  CapsuleX UI          |                                  |                     |
+|  Dashboard & Controls |                                  |                     |
++-----------+-----------+                                  |                     |
+            |                                              |                     |
+            v                                              |                     |
++-----------------------+                                  |                     |
+|  Pre-Flight Engine    |                                  |                     |
+|  • AC Power Check     |                                  |                     |
+|  • Battery >= 50%     |                                  |                     |
+|  • SHA-256 Digest     |                                  |                     |
+|  • Device ID Match    |                                  |                     |
++-----------+-----------+                                  |                     |
+            |                                              |                     |
+            v (Only if 100% Passed)                        |                     |
++-----------------------+      Staged Capsule (Safe API)   |  Native UEFI Flash  |
+|  OEM / OS Handoff     | ===============================> |  On Next Reboot     |
+|  (fwupd / Capsule)    |                                  |  (Vendor Protected) |
++-----------------------+                                  +---------------------+
 ```
+
+1. **Inspect**: Safely read current BIOS version and security states.
+2. **Verify**: Pre-flight safety engine confirms AC power, battery health, and cryptographic signatures.
+3. **Stage**: Firmware is handed to the official UEFI capsule mechanism for safe flashing upon reboot.
 
 ---
 
-## 🚀 Quick Start
+## Quick Start Guide
 
 ### Prerequisites
-* Python 3.9+
-* Linux / Windows
+- **Node.js**: v20.0.0 or higher (v24 recommended)
+- **npm**: v10.0.0 or higher
+- **Linux** (Debian, Ubuntu, Fedora, Arch) or **Windows**
 
-### Installation
+### Setup & Run
+
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/capsulex.git
+# 1. Clone the repository
+git clone git@github.com:abdulwalidal/capsulex.git
 cd capsulex
 
-# Install dependencies
-pip install -r requirements.txt
+# 2. Install dependencies
+npm install
 
-# Run CapsuleX
-python3 -m capsulex.app
+# 3. Launch CapsuleX in development mode
+npm run dev
 ```
 
 ---
 
-## 🛡️ Safety Principle
-CapsuleX strictly adheres to the principle of **delegated firmware execution**:
-The application **never** directly writes to physical BIOS/SPI flash chips. All firmware deployment is staged through official UEFI Capsule and OEM firmware mechanisms.
+## 📚 Open Source Governance & Documentation
+
+CapsuleX is built according to open-source best practices:
+
+| Document | Purpose |
+| :--- | :--- |
+| [**Architecture & Security**](ARCHITECTURE.md) | In-depth system design, component boundaries, and threat model. |
+| [**Roadmap**](ROADMAP.md) | Project milestones from `v0.1.0` to production `v1.0.0`. |
+| [**Contributing Guidelines**](CONTRIBUTING.md) | Trunk-based pull request workflow and Conventional Commits. |
+| [**Security Policy**](SECURITY.md) | Zero-brick commitment and responsible vulnerability reporting. |
+| [**Code of Conduct**](CODE_OF_CONDUCT.md) | Contributor Covenant v2.1 community standards. |
+| [**License**](LICENSE) | Permissive open-source MIT License. |
 
 ---
 
-## 📄 License
-MIT License
+## License
+
+This project is licensed under the terms of the [MIT License](LICENSE).
